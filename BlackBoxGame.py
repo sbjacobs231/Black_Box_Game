@@ -31,7 +31,7 @@ class BlackBoxGame:
             return False
 
         shoot = Shoot.Shoot(self._board, row, column)         # initialize a Shot
-        if row == 0 or column == 0:                           # if tile is an edge
+        if row == 0 or column == 0 or row == 9 or column == 9:# if tile is an edge
             self._board.update_tile(row, column, 'u')         # mark edge as used
 
         if shoot.check_if_next_tile_is_hit():                 # if next tile is a hit

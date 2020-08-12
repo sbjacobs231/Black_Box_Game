@@ -17,19 +17,15 @@ class Shoot:
         self._board_object = board_object
         self._row = row
         self._column = column
-        self._first_compare = True                          # for assessing reflection
 
     def is_reflection(self):
         """
         Is the shot a reflection: True or False
         First comparison made when player shoots.
         """
-        if self._first_compare:
-            self.initial_direction()                        # set initial direction of shot
-            board = self._board_object.get_board()          # get the list of lists board
-            return self.reflection_helper()
-        self._first_compare = False                         # This function ran once.
-        return False                                        # We only want this to run once per shot.
+        self.initial_direction()                        # set initial direction of shot
+        board = self._board_object.get_board()          # get the list of lists board
+        return self.reflection_helper()
 
 
     def reflection_helper(self):
@@ -115,6 +111,7 @@ class Shoot:
                 return (self._row, self._column)        # return the edge coordinates
 
         if self.check_if_next_tile_is_hit():            # is next tile a hit?
+            self.assign_next_tile()                     # move to next tile
             self.mark_hit()                             # update the board
             return None
 

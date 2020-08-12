@@ -14,6 +14,7 @@ class BlackBoxGameTester(unittest.TestCase):
         """Initialize an instance of BlackBoxGame"""
 
         self._BlackBoxGame = BlackBoxGame.BlackBoxGame([(3,2),(1,7),(4,6),(8,8), (8, 2), (3, 1)])
+        self._BlackBoxGame1 = BlackBoxGame.BlackBoxGame([(3,1), (3,3), (7,3)])
 
     def test_initialized_board(self):
         """Tests that the board initializes with the atoms in the correct locations."""
@@ -29,6 +30,24 @@ class BlackBoxGameTester(unittest.TestCase):
             ['e', '', '', '', '', '', '', '', '', 'e'],
             ['e', '', '', '', '', '', '', '', '', 'e'],
             ['e', '', 'a', '', '', '', '', '', 'a', 'e'],
+            ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c']
+        ]
+        self.assertEqual(result, expected)
+
+    def test_initialized_board_1(self):
+        """Tests that the board initializes with the atoms in the correct locations."""
+
+        result = self._BlackBoxGame1.get_board_object().get_board()
+        expected = [
+            ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', 'a', '', 'a', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', 'a', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
             ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c']
         ]
         self.assertEqual(result, expected)
@@ -98,73 +117,60 @@ class BlackBoxGameTester(unittest.TestCase):
         result = self._BlackBoxGame.shoot_ray(6, 0)
         self.assertEqual((6, 9), result)
 
-    # def test_hit_down(self):
-    #     """Tests that a hit registers"""
-    #     expected = [
-    #         ['c', 'e', 'u', 'e', 'e', 'e', 'e', 'e', 'e', 'c'],
-    #         ['e', '', '', '', '', '', '', 'a', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', 'h', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', 'a', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', 'a', 'e'],
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c']
-    #     ]
-    #     result = self._BlackBoxGame.shoot_ray(0, 2)
-    #     self.assertEqual(result, expected)
-    #
-    # def test_hit_up(self):
-    #     """Tests that a hit registers"""
-    #     expected = [
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c'],
-    #         ['e', '', '', '', '', '', '', 'a', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', 'a', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', 'h', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', 'a', 'e'],
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'u', 'e', 'e', 'c']
-    #     ]
-    #     result = self._BlackBoxGame.shoot_ray(9, 6)
-    #     self.assertEqual(result, expected)
-    # #
-    # def test_hit_right(self):
-    #     """Tests that a hit registers"""
-    #     expected = [
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c'],
-    #         ['u', '', '', '', '', '', '', 'h', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', 'a', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', 'a', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', 'a', 'e'],
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c']
-    #     ]
-    #     result = self._BlackBoxGame.shoot_ray(1, 0)
-    #     self.assertEqual(result, expected)
-    #
-    # def test_hit_left(self):
-    #     """Tests that a hit registers"""
-    #     expected = [
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c'],
-    #         ['e', '', '', '', '', '', '', 'h', '', 'u'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', 'a', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', 'a', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', '', 'e'],
-    #         ['e', '', '', '', '', '', '', '', 'a', 'e'],
-    #         ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c']
-    #     ]
-    #     result = self._BlackBoxGame.shoot_ray(1, 9)
-    #     self.assertEqual(result, expected)
+    def test_single_deflection(self):
+        """Tests a simple single deflection"""
+        result = self._BlackBoxGame.shoot_ray(9, 5)
+        self.assertEqual((5, 0), result)
+
+    def test_double_deflection(self):
+        """Tests two deflections in one path, not to confused with a double deflection"""
+        result = self._BlackBoxGame1.shoot_ray(0, 2)
+        self.assertEqual((0,2), result)
+
+    def test_detour(self):
+        """Tests for detour"""
+        result = self._BlackBoxGame1.shoot_ray(6, 9)
+        self.assertEqual((4, 9), result)
+
+    def test_board_records(self):
+        """Tests the board records properly"""
+        expected = [
+            ['c', 'e', 'u', 'e', 'e', 'e', 'e', 'e', 'e', 'c'],
+            ['e', '', '', '', '', '', '', 'a', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'u'],
+            ['e', 'a', 'h', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', 'h', '', '', 'e'],
+            ['u', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', 'a', '', '', '', '', '', 'h', 'e'],
+            ['c', 'e', 'e', 'e', 'e', 'u', 'u', 'e', 'e', 'c']
+        ]
+        self._BlackBoxGame.shoot_ray(0, 2)
+        self._BlackBoxGame.shoot_ray(9, 6)
+        self._BlackBoxGame.shoot_ray(9, 5)
+        self._BlackBoxGame.shoot_ray(2, 9)
+        result = self._BlackBoxGame.get_board_object().get_board()
+        self.assertEqual(result, expected)
+
+    def test_board_records_1(self):
+        """Second test for board recording properly"""
+        expected = [
+            ['c', 'e', 'u', 'u', 'e', 'e', 'e', 'e', 'e', 'c'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', 'a', '', 'h', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['e', '', '', 'a', '', '', '', '', '', 'e'],
+            ['e', '', '', '', '', '', '', '', '', 'e'],
+            ['c', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'c']
+        ]
+        self._BlackBoxGame1.shoot_ray(0, 2)
+        self._BlackBoxGame1.shoot_ray(0, 3)
+        result = self._BlackBoxGame1.get_board_object().get_board()
+        self.assertEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()
