@@ -22,25 +22,27 @@ class BlackBoxGame:
     def shoot_ray(self, row, column):
         """
         Takes as parameters the row and column where the ray originates
-        Corner and non-border squares are not valid
-        Return may be None, False or a tuple (row, column)
+        Return is False if row/column is for corner or non-border tile
+        Return is None if there is a hit, False or a tuple (row, column)
+        Return is tuple(row, column) for a miss
         """
-        # if ray shot is a corner edge, used edge, or not an edge return False
-        if not self._board.is_unused_board_edge(row, column):
+
+        if not self._board.is_unused_board_edge(row, column): # if ray shot is a corner edge, used edge, or not an edge return False
             return False
-        shoot = Shoot.Shoot(self._board, row, column)                # initialize a Shot
-        if row == 0 or column == 0:                                  # if tile is an edge
-            self._board.update_tile(row, column, 'u')                # mark edge as used
 
-        if shoot.check_if_next_tile_is_hit():                        # if next tile is a hit
-            shoot.assign_next_tile()                                 # go to next tile
-            shoot.mark_hit()                                         # mark tile as a hit
+        shoot = Shoot.Shoot(self._board, row, column)         # initialize a Shot
+        if row == 0 or column == 0:                           # if tile is an edge
+            self._board.update_tile(row, column, 'u')         # mark edge as used
 
-        if shoot.is_reflection():                                    # if shot is a reflection
-            return (row, column)                                     # return the exit tile
+        if shoot.check_if_next_tile_is_hit():                 # if next tile is a hit
+            shoot.assign_next_tile()                          # go to next tile
+            shoot.mark_hit()                                  # mark tile as a hit
+            return None
 
-        shoot.next_tile()
-        return self._board.get_board()
+        if shoot.is_reflection():                             # if shot is a reflection
+            return (row, column)                              # return the exit tile
+
+        return shoot.next_tile()                              # use recursion to loop through the board
 
     def guess_atom(self, row, column):
         """

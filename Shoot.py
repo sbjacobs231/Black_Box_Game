@@ -89,11 +89,6 @@ class Shoot:
         else:                       # starting point is right column
             self._direction = 'left'
 
-    def dive_into_board(self):
-        """
-        If the shot is not a reflection or immediate hit then dive further into the board.
-
-        """
 
     def assign_next_tile(self):
         """
@@ -108,23 +103,25 @@ class Shoot:
         if self._direction == 'left':
             self._column = self._column - 1
 
-    def next_tile(self):
+    def next_tile(self, iterations = 1):
         """
         Moves the shot forward one tile on the board at a time.
         """
         board = self._board_object.get_board()          # get the list of lists board
-        # if we hit the edge (Base case)
-        if board[self._row][self._column] == 'e' or board[self._row][self._column] == 'u':
-            return (self._row, self._column)            # return the edge coordinates
-        self.assign_next_tile()                         # assigns row and column of next tile
-        self.mark_hit()                                 # is next tile a hit?
-        self.next_tile()                                # proceed to next tile
 
-    def mark_hit(self):
-        """
-        Mark tile as a hit
-        """
-        self._board_object.update_tile(self._row, self._column, 'h')
+        if iterations > 1:                              # if we hit the edge (Base case)
+            if board[self._row][self._column] == 'e' or board[self._row][self._column] == 'u':
+                self._board_object.update_tile(self._row, self._column, 'u') # update the board
+                return (self._row, self._column)        # return the edge coordinates
+
+        if self.check_if_next_tile_is_hit():            # is next tile a hit?
+            self.mark_hit()                             # update the board
+            return None
+
+        self.check_deflection()                         # check for deflection
+        self.assign_next_tile()                         # move to next tile
+        iterations = iterations + 1                     # allows for base case to occur
+        return self.next_tile(iterations)               # rinse and repeat
 
     def check_if_next_tile_is_hit(self):
         """
@@ -145,36 +142,72 @@ class Shoot:
                 return True
         return False
 
-    def deflection(self, row, column):
+    def mark_hit(self):
         """
-        Is the shot a deflection: True or False
+        Mark tile as a hit
         """
-        pass
+        self._board_object.update_tile(self._row, self._column, 'h')
 
-    def double_deflection(self, row, column):
+    def check_deflection(self):
         """
-        Is the shot a double deflection: True or False
+        Checks next tile's adjacent tiles for atom to see if there is a deflection
         """
-        pass
+        if self.double_deflection() == False:   # if there is no double deflection
+            self.single_deflection()            # check for single deflection
 
-    def miss(self, row, column):
+    def double_deflection(self):
         """
-        Is the shot a miss: True or False
+        Checks for a double deflection.
+        Returns True or False
         """
-        pass
+        if self._direction == 'down':           # if double deflection go up
+            if self.is_atom(self._row + 1, self._column - 1) and self.is_atom(self._row + 1, self._column + 1):
+                self._direction = 'up'
+                return True
 
-    def go_up(self, row, column):
-        """"""
-        pass
+        elif self._direction == 'up':           # if double deflection go down
+            if self.is_atom(self._row - 1, self._column - 1) and self.is_atom(self._row - 1, self._column + 1):
+                self._direction = 'down'
+                return True
 
-    def go_down(self, row, column):
-        """"""
-        pass
+        elif self._direction == 'right':        # if double deflection go left
+            if self.is_atom(self._row - 1, self._column + 1) and self.is_atom(self._row + 1, self._column + 1):
+                self._direction = 'left'
+                return True
 
-    def go_right(self, row, column):
-        """"""
-        pass
+        elif self._direction == 'left':         # if double deflection go right
+            if self.is_atom(self._row - 1, self._column - 1) and self.is_atom(self._row + 1, self._column - 1):
+                self._direction = 'right'
+                return True
 
-    def go_left(self, row, column):
-        """"""
-        pass
+        return False                            # returns False if there was no double deflection
+
+    def single_deflection(self):
+        """
+        Checks for a single deflection
+        """
+        if self._direction == 'down':                          # is next move a deflection going down
+            if self.is_atom(self._row + 1, self._column - 1):  # atom down one, left one?
+                self._direction = 'right'                      # go right
+            if self.is_atom(self._row + 1, self._column + 1):  # atom down one, right one?
+                self._direction = 'left'                       # go left
+
+
+        elif self._direction == 'up':                          # is next move a deflection going up
+            if self.is_atom(self._row - 1, self._column - 1):  # atom up one, left one?
+                self._direction = 'right'                      # go right
+            if self.is_atom(self._row - 1, self._column + 1):  # atom up one, right one?
+                self._direction = 'left'                       # go left
+
+        elif self._direction == 'right':                       # is next move a deflection going right
+            if self.is_atom(self._row - 1, self._column + 1):  # atom up one, right one?
+                self._direction = 'down'                       # go down
+            if self.is_atom(self._row + 1, self._column + 1):  # atom down one, right one?
+                self._direction = 'up'                         # go up
+
+        elif self._direction == 'left':
+            if self.is_atom(self._row - 1, self._column - 1):  # atom up one, left one?
+                self._direction = 'down'                       # go down
+            if self.is_atom(self._row + 1, self._column - 1):  # atom down one, left one?
+                self._direction = 'up'                         # go up
+

@@ -73,6 +73,31 @@ class BlackBoxGameTester(unittest.TestCase):
         result = self._BlackBoxGame.shoot_ray(2, 0)
         self.assertEqual((2,0), result)
 
+    def test_hit_down(self):
+        """Tests a hit going down"""
+        result = self._BlackBoxGame.shoot_ray(0, 7)
+        self.assertIsNone(result)
+
+    def test_hit_up(self):
+        """Tests a hit going up"""
+        result = self._BlackBoxGame.shoot_ray(9, 6)
+        self.assertIsNone(result)
+
+    def test_hit_right(self):
+        """Tests a hit going right"""
+        result = self._BlackBoxGame.shoot_ray(8, 0)
+        self.assertIsNone(result)
+
+    def test_hit_left(self):
+        """Tests a hit going left"""
+        result = self._BlackBoxGame.shoot_ray(4, 9)
+        self.assertIsNone(result)
+
+    def test_straight_miss(self):
+        """Tests a straight miss"""
+        result = self._BlackBoxGame.shoot_ray(6, 0)
+        self.assertEqual((6, 9), result)
+
     # def test_hit_down(self):
     #     """Tests that a hit registers"""
     #     expected = [
