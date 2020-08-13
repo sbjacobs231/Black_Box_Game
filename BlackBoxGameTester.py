@@ -172,5 +172,56 @@ class BlackBoxGameTester(unittest.TestCase):
         result = self._BlackBoxGame1.get_board_object().get_board()
         self.assertEqual(result, expected)
 
+    def test_incorrect_atom_guess(self):
+        """
+        Test that an incorrect atom guess subtracts 5 from the player's total score
+        And tests that a repeated wrong guess doesn't subtract more than 5 from total score
+        """
+        self._BlackBoxGame.guess_atom(1, 2)
+        self._BlackBoxGame.guess_atom(1, 2)
+        result = self._BlackBoxGame.get_score()
+        self.assertEqual(result, 20)
+
+    def test_incorrect_atom_guess_returns_false(self):
+        """
+        Tests that an incorrect atom guess returns False
+        """
+        result = self._BlackBoxGame.guess_atom(1, 2)
+        self.assertFalse(result)
+
+    def test_correct_atom_guess(self):
+        """
+        Tests that a correct atom guess returns True
+        """
+        result = self._BlackBoxGame.guess_atom(3, 2)
+        self.assertTrue(result)
+
+    def test_atoms_left(self):
+        """
+        Tests that correct number unguessed atoms are returned
+        """
+        self._BlackBoxGame.guess_atom(3, 2)
+        self._BlackBoxGame.guess_atom(8, 2)
+        self._BlackBoxGame.guess_atom(1, 2)
+        result = self._BlackBoxGame.atoms_left()
+        self.assertEqual(result, 4)
+
+    def test_get_score(self):
+        """
+        Shoot a straight miss
+        Shoot a hit
+        Shoot a reflection
+        Shoot a deflection
+        Guess a wrong atom location
+        Get score
+        """
+        self._BlackBoxGame.shoot_ray(6, 0)
+        self._BlackBoxGame.shoot_ray(3, 0)
+        self._BlackBoxGame.shoot_ray(2, 0)
+        self._BlackBoxGame.shoot_ray(9, 5)
+        self._BlackBoxGame.guess_atom(1, 2)
+        result = self._BlackBoxGame.get_score()
+        self.assertEqual(result, 14)
+
 if __name__ == '__main__':
     unittest.main()

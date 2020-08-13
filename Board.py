@@ -1,6 +1,6 @@
 # Author: Sky Jacobson
 # Date: 8/14/20
-# Description:
+# Description: Board class has all methods relating to reading and writing to the board.
 
 class Board:
     """
@@ -36,7 +36,9 @@ class Board:
         self.add_atoms_to_board(atom_locations)
 
     def add_atoms_to_board(self, atoms_locations):
-        """Upon initialization of the board, add atoms to the board"""
+        """
+        Upon initialization of the board, add atoms to the board
+        """
         for atom in atoms_locations:
             atom_row = atom[0]
             atom_column = atom[1]

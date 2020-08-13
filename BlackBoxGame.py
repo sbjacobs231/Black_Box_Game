@@ -1,14 +1,16 @@
 # Author: Sky Jacobson
-# Date: 8/7/20
-# Description:
+# Date: 8/14/20
+# Description: Black Box Game with a 10x10 board. Shoot rays from the edge of the board.
+# Guess where atoms are located. And retrieve your score.
 
 import Shoot
 import Board
+import Player
 
 class BlackBoxGame:
     """
     Class for an abstract board game called Black Box.
-    This class will interact with the classes Board and Shoot
+    This class will interact with the classes Board, Shoot, Player
     """
 
     def __init__(self, atom_locations):
@@ -17,7 +19,7 @@ class BlackBoxGame:
         Initialize the board with atoms
         """
         self._board = Board.Board(atom_locations)
-        self._player = Player()
+        self._player = Player.Player(atom_locations)
 
     def shoot_ray(self, row, column):
         """
@@ -46,69 +48,30 @@ class BlackBoxGame:
 
     def guess_atom(self, row, column):
         """
-        Returns True or False and adjusts the players score based on a hit or miss
+        Return True if there is an atom at the location
+        Return False and subtract 5 from the overall score if there is no atom at the location
         """
-        # if there is an atom at the location return True
-        for atom in self._atom_locations:
-            if (row, column) == atom:
-                return True
-        # else return False and subtract 5 from the overall score
-        self._player.wrong_atom_guess()
+        if self._player.find_atom(row, column):               # if atom is found at coords
+            self._player.add_correct_guess(row, column)       # add guess to list of correct guesses
+            return True                                       # return True
+        self._player.subtract_5(row, column)                  # subtract 5 from overall score if it's a new guess
+        self._player.add_wrong_guess(row, column)             # otherwise there wasn't an atom at this location
         return False
 
     def get_score(self):
         """
+        Subtracts 1 from every used edge of the board.
         Returns the player's score
         """
+        self._player.subtract_used_edges_from_score(self._board.get_board())
         return self._player.get_score()
 
     def atoms_left(self):
         """
         Returns the number of atoms that haven't been guessed yet
         """
-        pass
-
-    def get_player_object(self):
-        """Method is for testing purposes"""
-        return self._player
-
-    def get_shoot_object(self):
-        """Method is for testing purposes"""
-        return self._shoot
+        return self._player.atoms_left()
 
     def get_board_object(self):
         """Method is for testing purposes"""
         return self._board
-
-class Player:
-    """
-    Class representing a player.
-    This class will interact with the BlackBoxGame class.
-    """
-
-    def __init__(self):
-        # Each player starts with 25 points.
-        self._score = 25
-
-    def get_score(self):
-        """Return player's score"""
-        return self._score
-
-    def wrong_atom_guess(self):
-        """Minus 5 points for every incorrect Atom guess"""
-        self._score = self._score - 5
-
-
-def main():
-    """
-    For testing
-    """
-    game = BlackBoxGame([(3, 2), (1, 7), (4, 6), (8, 8)])
-    # move_result = game.shoot_ray(3, 9)
-    # game.shoot_ray(0, 2)
-    # guess_result = game.guess_atom(5, 5)
-    # score = game.get_score()
-    # atoms = game.atoms_left()
-
-if __name__ == '__main__':
-    main()
