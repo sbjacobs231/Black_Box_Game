@@ -1,5 +1,5 @@
 # Author: Sky Jacobson
-# Date: 8/14/20
+# Date: 8/13/20
 # Description: Board class has all methods relating to reading and writing to the board.
 
 class Board:

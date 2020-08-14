@@ -1,5 +1,5 @@
 # Author: Sky Jacobson
-# Date: 8/14/20
+# Date: 8/13/20
 # Description: Black Box Game with a 10x10 board. Shoot rays from the edge of the board.
 # Guess where atoms are located. And retrieve your score.
 

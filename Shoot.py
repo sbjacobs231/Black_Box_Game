@@ -1,5 +1,5 @@
 # Author: Sky Jacobson
-# Date: 8/14/20
+# Date: 8/13/20
 # Description: Shoot class holds all methods for fulfilling the conditions of the
 # different types of shots that can be made in the BlackBoxGame.
 

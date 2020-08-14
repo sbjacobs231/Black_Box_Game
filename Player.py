@@ -1,5 +1,5 @@
 # Author: Sky Jacobson
-# Date: 8/14/20
+# Date: 8/13/20
 # Description: Player class holds all methods in relation to keeping score.
 
 class Player:
