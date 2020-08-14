@@ -70,4 +70,3 @@ class Board:
         if self._board[row][column] == 'e':
             return True
         return False
-

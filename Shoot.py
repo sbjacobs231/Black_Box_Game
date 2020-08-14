@@ -208,4 +208,3 @@ class Shoot:
                 self._direction = 'down'                       # go down
             if self.is_atom(self._row + 1, self._column - 1):  # atom down one, left one?
                 self._direction = 'up'                         # go up
-
